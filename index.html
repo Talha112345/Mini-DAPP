@@ -15,12 +15,24 @@
     <h1>My dApp Assignment</h1>
     <p>A simple frontend for my Solidity Smart Contract.</p>
     <button id="connectButton">Connect Wallet</button>
+    <!-- Added a link -->
+    <p>Check contract on Sepolia Etherscan: 
+      <a href="https://sepolia.etherscan.io/address/0xdd7d218977c0dd391B3B4076A0C6221Cca76C1cF" target="_blank">View Contract</a>
+    </p>
   </header>
 
   <main>
     <!-- Section for Reading Data -->
     <section class="card">
       <h2>Read from Contract</h2>
+      
+      <!-- Added a list of reading options -->
+      <ul>
+        <li>Click "Get Message" to read the current message</li>
+        <li>Click "Get Value" to read the current value</li>
+        <li>Click "Get Owner" to read the contract owner</li>
+      </ul>
+
       <button id="readButton">1. Get Message</button>
       <p>Current Message: <strong id="messageDisplay" class="placeholder">(Click button to fetch)</strong></p>
 
@@ -46,6 +58,9 @@
         <button id="incrementButton">Increment Value</button>
       </div>
 
+      <!-- Added an image -->
+      <img src="screenshots/transaction.png" alt="Transaction Demo" width="200">
+
       <p>Transaction Status: <strong id="txStatus">Idle</strong></p>
     </section>
   </main>
@@ -53,7 +68,7 @@
   <script>
     // ✅ Contract Info
     const contractAddress = "0xdd7d218977c0dd391B3B4076A0C6221Cca76C1cF";
-    const contractABI = [/* same ABI as your original code */];
+    const contractABI = [/* Paste your full ABI here */];
 
     // ✅ Global Variables
     let provider;
