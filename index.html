@@ -51,6 +51,7 @@
 
             <p>Transaction Status: <strong id="txStatus">Idle</strong></p>
         </section>
+
     </main>
     
     <script>
@@ -62,148 +63,148 @@
         
         // Your Contract ABI
         const contractABI = [
-	{
-		"inputs": [],
-		"name": "incrementValue",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "initMessage",
-				"type": "string"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "constructor"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "oldMessage",
-				"type": "string"
-			},
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "newMessage",
-				"type": "string"
-			}
-		],
-		"name": "MessageUpdated",
-		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "newMessage",
-				"type": "string"
-			}
-		],
-		"name": "setMessage",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "newValue",
-				"type": "uint256"
-			}
-		],
-		"name": "ValueIncremented",
-		"type": "event"
-	},
-	{
-		"inputs": [],
-		"name": "getMessage",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getOwner",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getValue",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "message",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "owner",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "value",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	}
-];
+            {
+                "inputs": [],
+                "name": "incrementValue",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "string",
+                        "name": "initMessage",
+                        "type": "string"
+                    }
+                ],
+                "stateMutability": "nonpayable",
+                "type": "constructor"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": false,
+                        "internalType": "string",
+                        "name": "oldMessage",
+                        "type": "string"
+                    },
+                    {
+                        "indexed": false,
+                        "internalType": "string",
+                        "name": "newMessage",
+                        "type": "string"
+                    }
+                ],
+                "name": "MessageUpdated",
+                "type": "event"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "string",
+                        "name": "newMessage",
+                        "type": "string"
+                    }
+                ],
+                "name": "setMessage",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": false,
+                        "internalType": "uint256",
+                        "name": "newValue",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "ValueIncremented",
+                "type": "event"
+            },
+            {
+                "inputs": [],
+                "name": "getMessage",
+                "outputs": [
+                    {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "getOwner",
+                "outputs": [
+                    {
+                        "internalType": "address",
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "getValue",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "message",
+                "outputs": [
+                    {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "owner",
+                "outputs": [
+                    {
+                        "internalType": "address",
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "value",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            }
+        ];
 
         // 2. --- GLOBAL VARIABLES ---
         let provider;
@@ -217,8 +218,8 @@
         const messageDisplay = document.getElementById('messageDisplay');
         const readValButton = document.getElementById('readValButton');
         const valueDisplay = document.getElementById('valueDisplay');
-        const readOwnerButton = document.getElementById('readOwnerButton');
-        const ownerDisplay = document.getElementById('ownerDisplay');
+        const readOwnerButton = document.getElementById('readOwnerButton'); 
+        const ownerDisplay = document.getElementById('ownerDisplay'); 
         
         const writeButton = document.getElementById('writeButton');
         const messageInput = document.getElementById('messageInput');
@@ -241,15 +242,20 @@
                     connectButton.textContent = `Connected: ${userAddress.substring(0, 6)}...${userAddress.substring(userAddress.length - 4)}`;
                     connectButton.style.backgroundColor = '#28a745';
                     console.log("Wallet connected!");
-                    
-                    // Automatically load initial data
-                    getMessage();
-                    getValue();
-                    getOwner();
+
+                    // --- THIS IS THE CHANGE ---
+                    // Removed automatic data fetching to prevent connection errors.
+                    // We will now click the buttons manually after connecting.
+                    // getMessage();
+                    // getValue();
+                    // getOwner(); 
+                    txStatus.textContent = "Wallet connected! Click 'Get' buttons to fetch data.";
+                    txStatus.className = "status-success";
 
                 } catch (error) {
                     console.error("User denied account access", error);
                     txStatus.textContent = "Error: User denied account access.";
+                    txStatus.className = "status-error";
                 }
             } else {
                 console.log('MetaMask is not installed!');
@@ -261,70 +267,85 @@
         async function getMessage() {
             if (!contract) {
                 txStatus.textContent = "Please connect your wallet first.";
+                txStatus.className = "status-error";
                 return;
             }
             try {
                 txStatus.textContent = "Fetching message...";
+                txStatus.className = "status-pending";
                 const message = await contract.getMessage();
                 messageDisplay.textContent = message;
-                messageDisplay.classList.remove("placeholder"); // Remove placeholder style
+                messageDisplay.classList.remove("placeholder");
                 txStatus.textContent = "Idle";
+                txStatus.className = "";
                 console.log("Message fetched:", message);
             } catch (error) {
                 console.error("Error fetching message:", error);
                 txStatus.textContent = "Error fetching message.";
+                txStatus.className = "status-error";
             }
         }
 
         async function getValue() {
             if (!contract) {
                 txStatus.textContent = "Please connect your wallet first.";
+                txStatus.className = "status-error";
                 return;
             }
             try {
                 txStatus.textContent = "Fetching value...";
+                txStatus.className = "status-pending";
                 const val = await contract.getValue();
                 valueDisplay.textContent = val.toString();
-                valueDisplay.classList.remove("placeholder"); // Remove placeholder style
+                valueDisplay.classList.remove("placeholder");
                 txStatus.textContent = "Idle";
+                txStatus.className = "";
                 console.log("Value fetched:", val.toString());
             } catch (error) {
                 console.error("Error fetching value:", error);
                 txStatus.textContent = "Error fetching value.";
+                txStatus.className = "status-error";
             }
         }
         
         async function getOwner() {
             if (!contract) {
                 txStatus.textContent = "Please connect your wallet first.";
+                txStatus.className = "status-error";
                 return;
             }
             try {
                 txStatus.textContent = "Fetching owner...";
-                const ownerAddress = await contract.getOwner();
+                txStatus.className = "status-pending";
+                const ownerAddress = await contract.getOwner(); 
                 ownerDisplay.textContent = ownerAddress;
-                ownerDisplay.classList.remove("placeholder"); // Remove placeholder style
+                ownerDisplay.classList.remove("placeholder");
                 txStatus.textContent = "Idle";
+                txStatus.className = "";
                 console.log("Owner fetched:", ownerAddress);
             } catch (error) {
                 console.error("Error fetching owner:", error);
                 txStatus.textContent = "Error fetching owner.";
+                txStatus.className = "status-error";
             }
         }
 
         async function setMessage() {
             if (!signer) {
                 txStatus.textContent = "Please connect your wallet first.";
+                txStatus.className = "status-error";
                 return;
             }
             const newMessage = messageInput.value;
             if (!newMessage) {
                 txStatus.textContent = "Please enter a message.";
+                txStatus.className = "status-error";
                 return;
             }
 
             try {
                 txStatus.textContent = "Sending transaction (check MetaMask)...";
+                txStatus.className = "status-pending";
                 const contractWithSigner = contract.connect(signer);
                 const tx = await contractWithSigner.setMessage(newMessage);
                 
@@ -332,6 +353,7 @@
                 await tx.wait();
                 
                 txStatus.textContent = "Transaction successful!";
+                txStatus.className = "status-success";
                 console.log("Message set!", tx);
                 
                 getMessage();
@@ -340,17 +362,20 @@
             } catch (error) {
                 console.error("Error setting message:", error);
                 txStatus.textContent = "Error: Transaction failed.";
+                txStatus.className = "status-error";
             }
         }
 
         async function incrementValue() {
             if (!signer) {
                 txStatus.textContent = "Please connect your wallet first.";
+                txStatus.className = "status-error";
                 return;
             }
 
             try {
                 txStatus.textContent = "Sending transaction (check MetaMask)...";
+                txStatus.className = "status-pending";
                 const contractWithSigner = contract.connect(signer);
                 const tx = await contractWithSigner.incrementValue();
                 
@@ -358,6 +383,7 @@
                 await tx.wait();
                 
                 txStatus.textContent = "Transaction successful!";
+                txStatus.className = "status-success";
                 console.log("Value incremented!", tx);
                 
                 getValue();
@@ -365,6 +391,7 @@
             } catch (error) {
                 console.error("Error incrementing value:", error);
                 txStatus.textContent = "Error: Transaction failed.";
+                txStatus.className = "status-error";
             }
         }
 
@@ -373,7 +400,7 @@
         connectButton.onclick = connectWallet;
         readButton.onclick = getMessage;
         readValButton.onclick = getValue;
-        readOwnerButton.onclick = getOwner;
+        readOwnerButton.onclick = getOwner; 
         writeButton.onclick = setMessage;
         incrementButton.onclick = incrementValue;
 
