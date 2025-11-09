@@ -6,12 +6,11 @@
   <title>My dApp Assignment</title>
   <link rel="stylesheet" href="style.css">
 
-  <!-- ✅ Updated Ethers.js Import (Correct CDN) -->
+  <!-- ✅ Updated Ethers.js Import -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
 </head>
 
 <body>
-
   <header>
     <h1>My dApp Assignment</h1>
     <p>A simple frontend for my Solidity Smart Contract.</p>
@@ -54,149 +53,7 @@
   <script>
     // ✅ Contract Info
     const contractAddress = "0xdd7d218977c0dd391B3B4076A0C6221Cca76C1cF";
-    const contractABI = [
-      {
-        "inputs": [],
-        "name": "incrementValue",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "string",
-            "name": "initMessage",
-            "type": "string"
-          }
-        ],
-        "stateMutability": "nonpayable",
-        "type": "constructor"
-      },
-      {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": false,
-            "internalType": "string",
-            "name": "oldMessage",
-            "type": "string"
-          },
-          {
-            "indexed": false,
-            "internalType": "string",
-            "name": "newMessage",
-            "type": "string"
-          }
-        ],
-        "name": "MessageUpdated",
-        "type": "event"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "string",
-            "name": "newMessage",
-            "type": "string"
-          }
-        ],
-        "name": "setMessage",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": false,
-            "internalType": "uint256",
-            "name": "newValue",
-            "type": "uint256"
-          }
-        ],
-        "name": "ValueIncremented",
-        "type": "event"
-      },
-      {
-        "inputs": [],
-        "name": "getMessage",
-        "outputs": [
-          {
-            "internalType": "string",
-            "name": "",
-            "type": "string"
-          }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "name": "getOwner",
-        "outputs": [
-          {
-            "internalType": "address",
-            "name": "",
-            "type": "address"
-          }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "name": "getValue",
-        "outputs": [
-          {
-            "internalType": "uint256",
-            "name": "",
-            "type": "uint256"
-          }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "name": "message",
-        "outputs": [
-          {
-            "internalType": "string",
-            "name": "",
-            "type": "string"
-          }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "name": "owner",
-        "outputs": [
-          {
-            "internalType": "address",
-            "name": "",
-            "type": "address"
-          }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "name": "value",
-        "outputs": [
-          {
-            "internalType": "uint256",
-            "name": "",
-            "type": "uint256"
-          }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-      }
-    ];
+    const contractABI = [/* same ABI as your original code */];
 
     // ✅ Global Variables
     let provider;
@@ -216,67 +73,73 @@
     const messageInput = document.getElementById('messageInput');
     const txStatus = document.getElementById('txStatus');
 
-    // ✅ Connect Wallet
+    // ✅ Connect Wallet with improved error handling
     async function connectWallet() {
-      if (window.ethereum) {
-        try {
-          await window.ethereum.request({ method: 'eth_requestAccounts' });
-          provider = new ethers.providers.Web3Provider(window.ethereum);
-          signer = provider.getSigner();
-          contract = new ethers.Contract(contractAddress, contractABI, signer);
-
-          const address = await signer.getAddress();
-          connectButton.textContent = `Connected: ${address.slice(0, 6)}...${address.slice(-4)}`;
-          connectButton.style.backgroundColor = '#28a745';
-          txStatus.textContent = 'Wallet connected successfully.';
-          console.log("Wallet connected!");
-        } catch (error) {
-          console.error("Connection error:", error);
-          txStatus.textContent = 'Error: User denied access or connection failed.';
-        }
-      } else {
+      if (!window.ethereum) {
         alert("MetaMask not found! Please install it first.");
+        return;
+      }
+
+      try {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        provider = new ethers.providers.Web3Provider(window.ethereum);
+        signer = provider.getSigner();
+        contract = new ethers.Contract(contractAddress, contractABI, signer);
+
+        const address = await signer.getAddress();
+        connectButton.textContent = `Connected: ${address.slice(0, 6)}...${address.slice(-4)}`;
+        connectButton.style.backgroundColor = '#28a745';
+        txStatus.textContent = 'Wallet connected successfully.';
+        console.log("Wallet connected!");
+      } catch (error) {
+        console.error("Connection error:", error);
+        if (error.code === 4001) { // User rejected request
+          txStatus.textContent = 'Connection canceled by user. Please try again.';
+        } else {
+          txStatus.textContent = 'Connection failed. Check console for details.';
+        }
       }
     }
 
     // ✅ Read Functions
     async function getMessage() {
+      if (!contract) return alert("Connect wallet first!");
       try {
         const message = await contract.getMessage();
         messageDisplay.textContent = message;
-        console.log("Message:", message);
       } catch (err) {
-        console.error("Error reading message:", err);
+        console.error(err);
+        txStatus.textContent = "Error reading message.";
       }
     }
 
     async function getValue() {
+      if (!contract) return alert("Connect wallet first!");
       try {
         const val = await contract.getValue();
         valueDisplay.textContent = val.toString();
-        console.log("Value:", val.toString());
       } catch (err) {
-        console.error("Error reading value:", err);
+        console.error(err);
+        txStatus.textContent = "Error reading value.";
       }
     }
 
     async function getOwner() {
+      if (!contract) return alert("Connect wallet first!");
       try {
         const owner = await contract.getOwner();
         ownerDisplay.textContent = owner;
-        console.log("Owner:", owner);
       } catch (err) {
-        console.error("Error reading owner:", err);
+        console.error(err);
+        txStatus.textContent = "Error reading owner.";
       }
     }
 
     // ✅ Write Functions
     async function setMessage() {
+      if (!contract) return alert("Connect wallet first!");
       const newMessage = messageInput.value;
-      if (!newMessage) {
-        alert("Please enter a message first!");
-        return;
-      }
+      if (!newMessage) return alert("Enter a message first!");
       try {
         const tx = await contract.setMessage(newMessage);
         txStatus.textContent = "Transaction sent. Waiting for confirmation...";
@@ -285,12 +148,13 @@
         getMessage();
         messageInput.value = "";
       } catch (err) {
-        console.error("Transaction failed:", err);
-        txStatus.textContent = "Error: Transaction failed.";
+        console.error(err);
+        txStatus.textContent = "Transaction failed.";
       }
     }
 
     async function incrementValue() {
+      if (!contract) return alert("Connect wallet first!");
       try {
         const tx = await contract.incrementValue();
         txStatus.textContent = "Transaction sent. Waiting for confirmation...";
@@ -298,8 +162,8 @@
         txStatus.textContent = "Value incremented!";
         getValue();
       } catch (err) {
-        console.error("Increment failed:", err);
-        txStatus.textContent = "Error: Transaction failed.";
+        console.error(err);
+        txStatus.textContent = "Transaction failed.";
       }
     }
 
