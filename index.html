@@ -1,411 +1,315 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My dApp Assignment</title>
-    <link rel="stylesheet" href="style.css">
-    
-    <!-- Ethers.js Library -->
-    <script src="https://cdn.ethers.io/lib/ethers-5.6.umd.min.js" type="application/javascript"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My dApp Assignment</title>
+  <link rel="stylesheet" href="style.css">
 
+  <!-- ✅ Updated Ethers.js Import (Correct CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
 </head>
+
 <body>
 
-    <header>
-        <h1>My dApp Assignment</h1>
-        <p>A simple frontend for my Solidity Smart Contract.</p>
-        <button id="connectButton">Connect Wallet</button>
-    </header>
+  <header>
+    <h1>My dApp Assignment</h1>
+    <p>A simple frontend for my Solidity Smart Contract.</p>
+    <button id="connectButton">Connect Wallet</button>
+  </header>
 
-    <main>
-        <!-- Section for Reading Data -->
-        <section class="card">
-            <h2>Read from Contract</h2>
-            <p>Get the current data stored in the contract.</p>
-            
-            <button id="readButton">1. Get Message</button>
-            <p>Current Message: <strong id="messageDisplay" class="placeholder">(Click button to fetch)</strong></p>
-            
-            <button id="readValButton">2. Get Value</button>
-            <p>Current Value: <strong id="valueDisplay" class="placeholder">(Click button to fetch)</strong></p>
+  <main>
+    <!-- Section for Reading Data -->
+    <section class="card">
+      <h2>Read from Contract</h2>
+      <button id="readButton">1. Get Message</button>
+      <p>Current Message: <strong id="messageDisplay" class="placeholder">(Click button to fetch)</strong></p>
 
-            <button id="readOwnerButton">3. Get Owner</button>
-            <p>Contract Owner: <strong id="ownerDisplay" class="placeholder">(Click button to fetch)</strong></p>
-        </section>
+      <button id="readValButton">2. Get Value</button>
+      <p>Current Value: <strong id="valueDisplay" class="placeholder">(Click button to fetch)</strong></p>
 
-        <!-- Section for Writing Data -->
-        <section class="card">
-            <h2>Write to Contract</h2>
-            
-            <div>
-                <label for="messageInput">Set New Message:</label>
-                <input type="text" id="messageInput" placeholder="Enter new message...">
-                <button id="writeButton">Set Message</button>
-            </div>
-            
-            <div>
-                <p>Increment the stored value:</p>
-                <button id="incrementButton">Increment Value</button>
-            </div>
+      <button id="readOwnerButton">3. Get Owner</button>
+      <p>Contract Owner: <strong id="ownerDisplay" class="placeholder">(Click button to fetch)</strong></p>
+    </section>
 
-            <p>Transaction Status: <strong id="txStatus">Idle</strong></p>
-        </section>
+    <!-- Section for Writing Data -->
+    <section class="card">
+      <h2>Write to Contract</h2>
+      
+      <div>
+        <label for="messageInput">Set New Message:</label>
+        <input type="text" id="messageInput" placeholder="Enter new message...">
+        <button id="writeButton">Set Message</button>
+      </div>
+      
+      <div>
+        <p>Increment the stored value:</p>
+        <button id="incrementButton">Increment Value</button>
+      </div>
 
-    </main>
-    
-    <script>
-        // --- START OF JAVASCRIPT CODE ---
+      <p>Transaction Status: <strong id="txStatus">Idle</strong></p>
+    </section>
+  </main>
 
-        // 1. --- CONTRACT DETAILS ---
-        // Your Contract Address
-        const contractAddress = "0xdd7d218977c0dd391B3B4076A0C6221Cca76C1cF";
-        
-        // Your Contract ABI
-        const contractABI = [
-            {
-                "inputs": [],
-                "name": "incrementValue",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "string",
-                        "name": "initMessage",
-                        "type": "string"
-                    }
-                ],
-                "stateMutability": "nonpayable",
-                "type": "constructor"
-            },
-            {
-                "anonymous": false,
-                "inputs": [
-                    {
-                        "indexed": false,
-                        "internalType": "string",
-                        "name": "oldMessage",
-                        "type": "string"
-                    },
-                    {
-                        "indexed": false,
-                        "internalType": "string",
-                        "name": "newMessage",
-                        "type": "string"
-                    }
-                ],
-                "name": "MessageUpdated",
-                "type": "event"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "string",
-                        "name": "newMessage",
-                        "type": "string"
-                    }
-                ],
-                "name": "setMessage",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "anonymous": false,
-                "inputs": [
-                    {
-                        "indexed": false,
-                        "internalType": "uint256",
-                        "name": "newValue",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "ValueIncremented",
-                "type": "event"
-            },
-            {
-                "inputs": [],
-                "name": "getMessage",
-                "outputs": [
-                    {
-                        "internalType": "string",
-                        "name": "",
-                        "type": "string"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "getOwner",
-                "outputs": [
-                    {
-                        "internalType": "address",
-                        "name": "",
-                        "type": "address"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "getValue",
-                "outputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "message",
-                "outputs": [
-                    {
-                        "internalType": "string",
-                        "name": "",
-                        "type": "string"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "owner",
-                "outputs": [
-                    {
-                        "internalType": "address",
-                        "name": "",
-                        "type": "address"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "value",
-                "outputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            }
-        ];
+  <script>
+    // ✅ Contract Info
+    const contractAddress = "0xdd7d218977c0dd391B3B4076A0C6221Cca76C1cF";
+    const contractABI = [
+      {
+        "inputs": [],
+        "name": "incrementValue",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "string",
+            "name": "initMessage",
+            "type": "string"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "string",
+            "name": "oldMessage",
+            "type": "string"
+          },
+          {
+            "indexed": false,
+            "internalType": "string",
+            "name": "newMessage",
+            "type": "string"
+          }
+        ],
+        "name": "MessageUpdated",
+        "type": "event"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "string",
+            "name": "newMessage",
+            "type": "string"
+          }
+        ],
+        "name": "setMessage",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "newValue",
+            "type": "uint256"
+          }
+        ],
+        "name": "ValueIncremented",
+        "type": "event"
+      },
+      {
+        "inputs": [],
+        "name": "getMessage",
+        "outputs": [
+          {
+            "internalType": "string",
+            "name": "",
+            "type": "string"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "getOwner",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "getValue",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "message",
+        "outputs": [
+          {
+            "internalType": "string",
+            "name": "",
+            "type": "string"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "value",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      }
+    ];
 
-        // 2. --- GLOBAL VARIABLES ---
-        let provider;
-        let signer;
-        let contract;
+    // ✅ Global Variables
+    let provider;
+    let signer;
+    let contract;
 
-        // 3. --- GETTING HTML ELEMENTS ---
-        const connectButton = document.getElementById('connectButton');
-        
-        const readButton = document.getElementById('readButton');
-        const messageDisplay = document.getElementById('messageDisplay');
-        const readValButton = document.getElementById('readValButton');
-        const valueDisplay = document.getElementById('valueDisplay');
-        const readOwnerButton = document.getElementById('readOwnerButton'); 
-        const ownerDisplay = document.getElementById('ownerDisplay'); 
-        
-        const writeButton = document.getElementById('writeButton');
-        const messageInput = document.getElementById('messageInput');
-        const incrementButton = document.getElementById('incrementButton');
-        
-        const txStatus = document.getElementById('txStatus');
+    // ✅ HTML Elements
+    const connectButton = document.getElementById('connectButton');
+    const readButton = document.getElementById('readButton');
+    const readValButton = document.getElementById('readValButton');
+    const readOwnerButton = document.getElementById('readOwnerButton');
+    const writeButton = document.getElementById('writeButton');
+    const incrementButton = document.getElementById('incrementButton');
+    const messageDisplay = document.getElementById('messageDisplay');
+    const valueDisplay = document.getElementById('valueDisplay');
+    const ownerDisplay = document.getElementById('ownerDisplay');
+    const messageInput = document.getElementById('messageInput');
+    const txStatus = document.getElementById('txStatus');
 
-        // 4. --- CORE FUNCTIONS ---
+    // ✅ Connect Wallet
+    async function connectWallet() {
+      if (window.ethereum) {
+        try {
+          await window.ethereum.request({ method: 'eth_requestAccounts' });
+          provider = new ethers.providers.Web3Provider(window.ethereum);
+          signer = provider.getSigner();
+          contract = new ethers.Contract(contractAddress, contractABI, signer);
 
-        async function connectWallet() {
-            if (typeof window.ethereum !== 'undefined') {
-                try {
-                    await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    
-                    provider = new ethers.providers.Web3Provider(window.ethereum);
-                    signer = provider.getSigner();
-                    contract = new ethers.Contract(contractAddress, contractABI, provider);
-
-                    const userAddress = await signer.getAddress();
-                    connectButton.textContent = `Connected: ${userAddress.substring(0, 6)}...${userAddress.substring(userAddress.length - 4)}`;
-                    connectButton.style.backgroundColor = '#28a745';
-                    console.log("Wallet connected!");
-
-                    // --- THIS IS THE CHANGE ---
-                    // Removed automatic data fetching to prevent connection errors.
-                    // We will now click the buttons manually after connecting.
-                    // getMessage();
-                    // getValue();
-                    // getOwner(); 
-                    txStatus.textContent = "Wallet connected! Click 'Get' buttons to fetch data.";
-                    txStatus.className = "status-success";
-
-                } catch (error) {
-                    console.error("User denied account access", error);
-                    txStatus.textContent = "Error: User denied account access.";
-                    txStatus.className = "status-error";
-                }
-            } else {
-                console.log('MetaMask is not installed!');
-                connectButton.textContent = 'Please install MetaMask!';
-                connectButton.style.backgroundColor = '#dc3545';
-            }
+          const address = await signer.getAddress();
+          connectButton.textContent = `Connected: ${address.slice(0, 6)}...${address.slice(-4)}`;
+          connectButton.style.backgroundColor = '#28a745';
+          txStatus.textContent = 'Wallet connected successfully.';
+          console.log("Wallet connected!");
+        } catch (error) {
+          console.error("Connection error:", error);
+          txStatus.textContent = 'Error: User denied access or connection failed.';
         }
+      } else {
+        alert("MetaMask not found! Please install it first.");
+      }
+    }
 
-        async function getMessage() {
-            if (!contract) {
-                txStatus.textContent = "Please connect your wallet first.";
-                txStatus.className = "status-error";
-                return;
-            }
-            try {
-                txStatus.textContent = "Fetching message...";
-                txStatus.className = "status-pending";
-                const message = await contract.getMessage();
-                messageDisplay.textContent = message;
-                messageDisplay.classList.remove("placeholder");
-                txStatus.textContent = "Idle";
-                txStatus.className = "";
-                console.log("Message fetched:", message);
-            } catch (error) {
-                console.error("Error fetching message:", error);
-                txStatus.textContent = "Error fetching message.";
-                txStatus.className = "status-error";
-            }
-        }
+    // ✅ Read Functions
+    async function getMessage() {
+      try {
+        const message = await contract.getMessage();
+        messageDisplay.textContent = message;
+        console.log("Message:", message);
+      } catch (err) {
+        console.error("Error reading message:", err);
+      }
+    }
 
-        async function getValue() {
-            if (!contract) {
-                txStatus.textContent = "Please connect your wallet first.";
-                txStatus.className = "status-error";
-                return;
-            }
-            try {
-                txStatus.textContent = "Fetching value...";
-                txStatus.className = "status-pending";
-                const val = await contract.getValue();
-                valueDisplay.textContent = val.toString();
-                valueDisplay.classList.remove("placeholder");
-                txStatus.textContent = "Idle";
-                txStatus.className = "";
-                console.log("Value fetched:", val.toString());
-            } catch (error) {
-                console.error("Error fetching value:", error);
-                txStatus.textContent = "Error fetching value.";
-                txStatus.className = "status-error";
-            }
-        }
-        
-        async function getOwner() {
-            if (!contract) {
-                txStatus.textContent = "Please connect your wallet first.";
-                txStatus.className = "status-error";
-                return;
-            }
-            try {
-                txStatus.textContent = "Fetching owner...";
-                txStatus.className = "status-pending";
-                const ownerAddress = await contract.getOwner(); 
-                ownerDisplay.textContent = ownerAddress;
-                ownerDisplay.classList.remove("placeholder");
-                txStatus.textContent = "Idle";
-                txStatus.className = "";
-                console.log("Owner fetched:", ownerAddress);
-            } catch (error) {
-                console.error("Error fetching owner:", error);
-                txStatus.textContent = "Error fetching owner.";
-                txStatus.className = "status-error";
-            }
-        }
+    async function getValue() {
+      try {
+        const val = await contract.getValue();
+        valueDisplay.textContent = val.toString();
+        console.log("Value:", val.toString());
+      } catch (err) {
+        console.error("Error reading value:", err);
+      }
+    }
 
-        async function setMessage() {
-            if (!signer) {
-                txStatus.textContent = "Please connect your wallet first.";
-                txStatus.className = "status-error";
-                return;
-            }
-            const newMessage = messageInput.value;
-            if (!newMessage) {
-                txStatus.textContent = "Please enter a message.";
-                txStatus.className = "status-error";
-                return;
-            }
+    async function getOwner() {
+      try {
+        const owner = await contract.getOwner();
+        ownerDisplay.textContent = owner;
+        console.log("Owner:", owner);
+      } catch (err) {
+        console.error("Error reading owner:", err);
+      }
+    }
 
-            try {
-                txStatus.textContent = "Sending transaction (check MetaMask)...";
-                txStatus.className = "status-pending";
-                const contractWithSigner = contract.connect(signer);
-                const tx = await contractWithSigner.setMessage(newMessage);
-                
-                txStatus.textContent = `Transaction pending... (Hash: ${tx.hash.substring(0, 8)}...)`;
-                await tx.wait();
-                
-                txStatus.textContent = "Transaction successful!";
-                txStatus.className = "status-success";
-                console.log("Message set!", tx);
-                
-                getMessage();
-                messageInput.value = "";
-                
-            } catch (error) {
-                console.error("Error setting message:", error);
-                txStatus.textContent = "Error: Transaction failed.";
-                txStatus.className = "status-error";
-            }
-        }
+    // ✅ Write Functions
+    async function setMessage() {
+      const newMessage = messageInput.value;
+      if (!newMessage) {
+        alert("Please enter a message first!");
+        return;
+      }
+      try {
+        const tx = await contract.setMessage(newMessage);
+        txStatus.textContent = "Transaction sent. Waiting for confirmation...";
+        await tx.wait();
+        txStatus.textContent = "Message updated successfully!";
+        getMessage();
+        messageInput.value = "";
+      } catch (err) {
+        console.error("Transaction failed:", err);
+        txStatus.textContent = "Error: Transaction failed.";
+      }
+    }
 
-        async function incrementValue() {
-            if (!signer) {
-                txStatus.textContent = "Please connect your wallet first.";
-                txStatus.className = "status-error";
-                return;
-            }
+    async function incrementValue() {
+      try {
+        const tx = await contract.incrementValue();
+        txStatus.textContent = "Transaction sent. Waiting for confirmation...";
+        await tx.wait();
+        txStatus.textContent = "Value incremented!";
+        getValue();
+      } catch (err) {
+        console.error("Increment failed:", err);
+        txStatus.textContent = "Error: Transaction failed.";
+      }
+    }
 
-            try {
-                txStatus.textContent = "Sending transaction (check MetaMask)...";
-                txStatus.className = "status-pending";
-                const contractWithSigner = contract.connect(signer);
-                const tx = await contractWithSigner.incrementValue();
-                
-                txStatus.textContent = `Transaction pending... (Hash: ${tx.hash.substring(0, 8)}...)`;
-                await tx.wait();
-                
-                txStatus.textContent = "Transaction successful!";
-                txStatus.className = "status-success";
-                console.log("Value incremented!", tx);
-                
-                getValue();
-                
-            } catch (error) {
-                console.error("Error incrementing value:", error);
-                txStatus.textContent = "Error: Transaction failed.";
-                txStatus.className = "status-error";
-            }
-        }
-
-
-        // 5. --- EVENT LISTENERS ---
-        connectButton.onclick = connectWallet;
-        readButton.onclick = getMessage;
-        readValButton.onclick = getValue;
-        readOwnerButton.onclick = getOwner; 
-        writeButton.onclick = setMessage;
-        incrementButton.onclick = incrementValue;
-
-        // --- END OF JAVASCRIPT CODE ---
-    </script>
-
+    // ✅ Event Listeners
+    connectButton.onclick = connectWallet;
+    readButton.onclick = getMessage;
+    readValButton.onclick = getValue;
+    readOwnerButton.onclick = getOwner;
+    writeButton.onclick = setMessage;
+    incrementButton.onclick = incrementValue;
+  </script>
 </body>
 </html>
